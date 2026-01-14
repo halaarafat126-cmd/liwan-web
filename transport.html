@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التنقلات | ليوان</title>
+
+<link href="https://fonts.googleapis.com/css?family=Tajawal:400,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+
+<style>
+body{
+  margin:0;
+  font-family:'Tajawal',sans-serif;
+  background:#f6f3ef;
+  color:#355774;
+}
+
+/* ===== Sidebar ===== */
+.liwan-sidenav {
+     position: fixed;
+     left: 0;
+     top: 0;
+     width: 80px;
+     height: 100vh;
+     background: #4c6b82;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     z-index: 1000;
+     box-shadow: 2px 0 18px rgba(40,54,90,0.07);
+   }
+   .liwan-sidenav ul {
+     list-style: none;
+     margin: 0;
+     padding: 0;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+   }
+   .liwan-sidenav li {
+     margin-bottom: 24px;
+     width: 100%;
+     display: flex;
+     justify-content: center;
+     position: relative;
+   }
+   .liwan-side-link {
+     position: relative;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 60px;
+     height: 60px;
+     border-radius: 12px;
+     color: #f8ebd7;
+     font-size: 24px;
+     text-decoration: none;
+     cursor: pointer;
+     transition: background 0.15s, box-shadow 0.18s;
+   }
+   .liwan-side-link:hover {
+     background: #365069;
+     box-shadow: 0 3px 18px rgba(31,59,77,0.13);
+   }
+   .liwan-side-link .liwan-icon-label {
+     position: absolute;
+     top: 50%;
+     left: 100%;
+     transform: translateY(-50%);
+     opacity: 0;
+     pointer-events: none;
+     background: #1f3b4d;
+     color: #f8ebd7;
+     padding: 8px 18px;
+     border-radius: 0 10px 10px 0;
+     white-space: nowrap;
+     font-size: 1em;
+     font-weight: 600;
+     transition: opacity 0.25s, left 0.2s;
+     box-shadow: 2px 2px 14px rgba(31,59,77,0.15);
+     z-index: 2;
+   }
+   .liwan-side-link:hover .liwan-icon-label {
+     opacity: 1;
+     pointer-events: auto;
+     left: 65px;
+   }
+   .liwan-side-link i {
+     margin: 0 auto;
+     transition: color 0.17s;
+   }
+   @media (max-width: 600px) {
+  .liwan-sidenav { 
+    width: 72px; 
+  }
+
+  .liwan-side-link { 
+    width: 56px; 
+    height: 56px; 
+  }
+
+  .liwan-side-link i {
+    font-size: 28px; /* ← هاي الأهم */
+  }
+
+  .liwan-side-link .liwan-icon-label { 
+    display: none; /* عالتلفون ما بدنا نص */
+  }
+}
+
+
+/* ===== MAIN ===== */
+.main-content{
+  margin-left:120px;
+  padding:40px;
+}
+.page-title{
+  text-align:center;
+  font-size:2rem;
+  font-weight:700;
+  margin-bottom:30px;
+}
+
+/* ===== GRID ===== */
+.transport-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:28px;
+}
+
+.transport-card{
+  background:#fff;
+  border-radius:18px;
+  box-shadow:0 4px 20px rgba(0,0,0,.08);
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+}
+
+.transport-card img{
+  width:100%;
+  height:160px;
+  object-fit:cover;
+  border-radius:12px;
+}
+
+.transport-title{
+  font-weight:700;
+  font-size:1.1rem;
+  margin:12px 0;
+}
+
+/* ===== BOOKING ===== */
+.booking{
+  display:none;
+  font-size:.9rem;
+}
+.booking label{display:block;margin:6px 0}
+
+.booking input[type="time"],
+.booking textarea{
+  width:100%;
+  margin-top:8px;
+  padding:8px;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
+
+/* زر */
+.transport-btn{
+  margin-top:12px;
+  padding:10px;
+  border:none;
+  border-radius:12px;
+  background:#f6bd60;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* ===== STATUS ===== */
+.ride-status{display:none;margin-top:12px}
+.status{
+  padding:12px;
+  border-radius:12px;
+  font-size:.9rem;
+}
+.loading{background:#fff3cd;color:#856404}
+.success{background:#e6f4ea;color:#1e6f43}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+  .main-content{margin-left:100px;padding:20px}
+  .transport-grid{grid-template-columns:1fr}
+}
+</style>
+
+</head>
+
+<body>
+    <?php
+    session_start();
+    $isVisitor = !isset($_SESSION['user_id']);
+    ?>
+    
+<!-- SIDEBAR -->
+<!-- ===== Sidebar ===== -->
+<nav class="liwan-sidenav" aria-label="شريط التنقل الجانبي الثابت">
+    <ul>
+      <li>
+        <a href="home.html" class="liwan-side-link">
+          <i class="fas fa-home"></i>
+          <span class="liwan-icon-label">الرئيسية</span>
+        </a>
+      </li>
+      <li>
+        <a href="profile.html" class="liwan-side-link">
+          <i class="fas fa-user-circle"></i>
+          <span class="liwan-icon-label">الملف الشخصي</span>
+        </a>
+      </li>
+      <li>
+       <a href="chat.html" class="liwan-side-link chat-link">
+         <i class="fas fa-comments"></i>
+         <span class="chat-dot"></span>
+         <span class="liwan-icon-label">الدردشة</span>
+       </a>      
+      </li>
+      <li>
+        <a href="activities.html" class="liwan-side-link">
+          <i class="fas fa-calendar-alt"></i>
+          <span class="liwan-icon-label">الأنشطة</span>
+        </a>
+      </li>
+      <li>
+        <a href="store.html" class="liwan-side-link">
+          <i class="fas fa-store"></i>
+          <span class="liwan-icon-label">المتجر</span>
+        </a>
+      </li>
+      <li>
+        <a href="transport.html" class="liwan-side-link">
+          <i class="fas fa-bus"></i>
+          <span class="liwan-icon-label">التنقلات</span>
+        </a>
+      </li>
+      <li>
+        <a href="it-support.html" class="liwan-side-link">
+          <i class="fas fa-headset"></i>
+          <span class="liwan-icon-label">الدعم التقني</span>
+        </a>
+      </li>
+      <li>
+        <a href="about.html" class="liwan-side-link">
+          <i class="fas fa-circle-info"></i>
+          <span class="liwan-icon-label">عن ليوان</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+<!-- MAIN -->
+<div class="main-content">
+  <div class="page-title">التنقلات</div>
+  <div class="transport-grid" id="grid"></div>
+</div>
+
+<script>
+/* ===== إعداد الحالة ===== */
+// بدّل الجزء القديم
+const isVisitor = !localStorage.getItem("userEmail"); 
+// ← true إذا ما فيه إيميل محفوظ، false إذا مستخدم مسجل
+
+const transports = [
+  {title:"سيارة خاصة", image:"https://images.unsplash.com/photo-1549924231-f129b911e442"},
+  {title:"تاكسي", image:"https://images.unsplash.com/photo-1525609004556-c46c7d6cf023"},
+  {title:"باص", image:"https://images.unsplash.com/photo-1509749837427-ac94a2553d0e"}
+];
+
+const grid = document.getElementById("grid");
+
+/* ===== RENDER ===== */
+function render(){
+  grid.innerHTML="";
+  transports.forEach((t,i)=>{
+    grid.innerHTML+=`
+      <div class="transport-card">
+        <img src="${t.image}">
+        <div class="transport-title">${t.title}</div>
+
+        <div class="booking">
+          <label>
+            <input type="radio" name="type-${i}" value="now">
+            احجز الآن
+          </label>
+          <label>
+            <input type="radio" name="type-${i}" value="later">
+            حجز لاحق
+          </label>
+
+          <input type="time" class="later-time" style="display:none">
+          <textarea placeholder="ملاحظات للسائق"></textarea>
+
+          <button class="transport-btn confirm-booking">
+            احجز الآن
+          </button>
+        </div>
+
+        <button class="transport-btn show-booking">
+          التفاصيل
+        </button>
+
+        <div class="ride-status"></div>
+      </div>
+    `;
+  });
+}
+render();
+
+/* ===== EVENTS ===== */
+grid.addEventListener("click",e=>{
+  const card = e.target.closest(".transport-card");
+  if(!card) return;
+
+  /* فتح التفاصيل */
+  if(e.target.classList.contains("show-booking")){
+    card.querySelector(".booking").style.display="block";
+    return;
+  }
+
+  /* قفل الزائر الكامل */
+  if(isVisitor){
+    if(
+      e.target.matches("input") ||
+      e.target.matches("textarea") ||
+      e.target.classList.contains("confirm-booking")
+    ){
+      alert("أنت زائر، هذه الميزة متاحة للمستخدمين المسجلين فقط");
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+  }
+
+  /* إظهار الوقت فقط */
+  if(e.target.type==="radio"){
+    const timeInput = card.querySelector(".later-time");
+    timeInput.style.display = e.target.value==="later" ? "block" : "none";
+  }
+
+  /* تأكيد الحجز */
+  if(e.target.classList.contains("confirm-booking")){
+    const selected = card.querySelector('input[type="radio"]:checked');
+    if(!selected){
+      alert("يرجى اختيار نوع الحجز");
+      return;
+    }
+
+    if(selected.value==="now"){
+      startNow(card);
+    }else{
+      const time = card.querySelector(".later-time").value;
+      if(!time){
+        alert("يرجى تحديد الوقت");
+        return;
+      }
+      confirmLater(card,time);
+    }
+  }
+});
+
+/* ===== FUNCTIONS ===== */
+function startNow(card){
+  const status = card.querySelector(".ride-status");
+  status.style.display="block";
+  status.innerHTML=`<div class="status loading">⏳ جاري البحث عن سيارة...</div>`;
+  setTimeout(()=>{
+    status.innerHTML=`<div class="status success">🚗 تم العثور على سائق، الوصول خلال 4 دقائق</div>`;
+  },3000);
+}
+
+function confirmLater(card,time){
+  const status = card.querySelector(".ride-status");
+  status.style.display="block";
+  status.innerHTML=`
+    <div class="status success">
+      ✅ تم تأكيد الرحلة<br>
+      🚗 السائق وافق وسيصل الساعة ${time}
+    </div>
+  `;
+}
+</script>
+
+</body>
+</html>

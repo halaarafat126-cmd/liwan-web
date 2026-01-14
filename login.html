@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>تسجيل مستخدم جديد - ليوان</title>
+ <link href="https://fonts.googleapis.com/css?family=Tajawal:wght@500;700&display=swap" rel="stylesheet">
+ <style>
+   body {
+     background-color: #f6f3ef;
+     font-family: 'Tajawal', Arial, sans-serif;
+     margin: 0;
+     padding: 0;
+     color: #4c6b82;
+     min-height: 100vh;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+   }
+   .registration-container {
+     background: #fff8f0;
+     padding: 40px 25px;
+     border-radius: 22px;
+     box-shadow: 0px 4px 28px #eee2d199;
+     max-width: 480px;
+     width: 95vw;
+     text-align: center;
+   }
+   .registration-title {
+     font-size: 2rem;
+     font-weight: bold;
+     margin-bottom: 25px;
+     color: #4c6b82;
+     letter-spacing: 1px;
+   }
+   .registration-form {
+     display: flex;
+     flex-direction: column;
+     gap: 20px;
+   }
+   .form-group {
+     display: flex;
+     flex-direction: column;
+     align-items: flex-start;
+     width: 95%;
+   }
+   .form-label {
+     font-size: 1.2rem;
+     margin-bottom: 8px;
+     color: #4c6b82;
+     font-weight: 500;
+   }
+   .form-input, .form-file {
+     width: 100%;
+     font-size: 1.2rem;
+     padding: 12px 14px;
+     border: 2px solid #f8ebd7;
+     border-radius: 12px;
+     outline: none;
+     background: #fff;
+     transition: border-color 0.16s, box-shadow 0.16s;
+     color: #363d4e;
+   }
+   .form-input:focus {
+     border-color: #4c6b82;
+     box-shadow: 0 1px 6px #4c6b8233;
+     background: #fffdfc;
+   }
+   .error-message { color: #dc5050; font-size: 1rem; margin-top: 4px; }
+   .registration-buttons { display: flex; justify-content: center; gap: 18px; margin-top: 16px; flex-wrap: wrap; }
+   .reg-btn {
+     padding: 14px 0;
+     min-width: 130px;
+     border: none;
+     border-radius: 12px;
+     font-size: 1.17rem;
+     font-weight: 600;
+     cursor: pointer;
+     background: #4c6b82;
+     color: #fff;
+     box-shadow: 0px 2px 9px #e6dac466;
+     transition: background 0.18s, color 0.18s;
+   }
+   .reg-btn:focus, .reg-btn:hover { background: #365069; color: #ffe3b0; }
+   .reg-btn.cancel { background: #f8ebd7; color: #4c6b82; border: 2px solid #4c6b82; }
+   .reg-btn.cancel:focus, .reg-btn.cancel:hover { background: #f3dfc3; color: #365069; border-color: #365069; }
+   @media (max-width: 600px) {
+    .registration-container { padding: 10vw 5vw; }
+     .registration-title { font-size: 1.6rem; }
+     .form-input, .form-file { font-size: 1.1rem; padding: 10px 10px; }
+     .reg-btn { font-size: 1.1rem; padding: 12px 0; }
+   }
+ </style>
+</head>
+<body>
+ <div class="registration-container">
+   <div class="registration-title" aria-label="تسجيل مستخدم جديد في ليوان">
+     تسجيل مستخدم جديد
+   </div>
+   <form id="registrationForm" class="registration-form" autocomplete="off" novalidate>
+     <div class="form-group">
+       <label for="fullName" class="form-label">الاسم </label>
+       <input type="text" class="form-input" id="fullName" name="fullName" required />
+       <div class="error-message" id="fullNameError"></div>
+     </div>
+     <div class="form-group">
+       <label for="email" class="form-label">البريد الإلكتروني</label>
+       <input type="email" class="form-input" id="email" name="email" list="savedEmails"required />
+       <datalist id="savedEmails"></datalist>
+       <div class="error-message" id="emailError"></div>
+     </div>
+     <div class="form-group">
+       <label for="password" class="form-label">كلمة المرور</label>
+       <input type="password" class="form-input" id="password" name="password" required minlength="4" />
+       <div class="error-message" id="passwordError"></div>
+     </div>
+     <div class="form-group">
+       <label for="confirmPassword" class="form-label">تأكيد كلمة المرور (اختياري)</label>
+       <input type="password" class="form-input" id="confirmPassword" name="confirmPassword" />
+       <div class="error-message" id="confirmPasswordError"></div>
+     </div>
+     <div class="form-group">
+       <label for="avatar" class="form-label">صورة البروفايل (اختياري)</label>
+       <input type="file" accept="image/*" class="form-file" id="avatar" name="avatar" />
+     </div>
+     <div class="registration-buttons">
+       <button type="submit" class="reg-btn register">تسجيل</button>
+       <button type="button" class="reg-btn cancel" id="cancelBtn">إلغاء</button>
+     </div>
+   </form>
+ </div>
+ <script>
+   const registrationForm = document.getElementById('registrationForm');
+   const fullName = document.getElementById('fullName');
+   const email = document.getElementById('email');
+   const password = document.getElementById('password');
+   const confirmPassword = document.getElementById('confirmPassword');
+   const avatar = document.getElementById('avatar');
+   const fullNameError = document.getElementById('fullNameError');
+   const emailError = document.getElementById('emailError');
+   const passwordError = document.getElementById('passwordError');
+   const confirmPasswordError = document.getElementById('confirmPasswordError');
+   const cancelBtn = document.getElementById('cancelBtn');
+   function clearErrors() {
+     fullNameError.textContent = "";
+     emailError.textContent = "";
+     passwordError.textContent = "";
+     confirmPasswordError.textContent = "";
+   }
+   function validateEmail(emailVal) {
+     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal);
+   }
+
+   // تحميل الإيميلات المحفوظة لنفس الجهاز
+   const savedEmails = JSON.parse(localStorage.getItem("savedEmails") || "[]");
+   const datalist = document.getElementById("savedEmails");
+   savedEmails.forEach(mail => {
+   const option = document.createElement("option");
+   option.value = mail;
+   datalist.appendChild(option);
+   });
+
+   registrationForm.addEventListener('submit', function(e) {
+     e.preventDefault();
+     clearErrors();
+     let isValid = true;
+     if (!fullName.value.trim()) {
+       fullNameError.textContent = "الاسم مطلوب";
+       isValid = false;
+     }
+     if (!email.value.trim()) {
+       emailError.textContent = "البريد الإلكتروني مطلوب";
+       isValid = false;
+     } else if (!validateEmail(email.value.trim())) {
+       emailError.textContent = "صيغة البريد الإلكتروني غير صحيحة";
+       isValid = false;
+     }
+     if (!password.value) {
+       passwordError.textContent = "كلمة المرور مطلوبة";
+       isValid = false;
+     } else if (password.value.length < 5) {
+       passwordError.textContent = "يجب أن تكون كلمة المرور 5 أحرف على الأقل";
+       isValid = false;
+     }
+     if (confirmPassword.value && confirmPassword.value !== password.value) {
+       confirmPasswordError.textContent = "تأكيد كلمة المرور غير مطابق";
+       isValid = false;
+     }
+     if (isValid) {
+       // حفظ البيانات في localStorage
+       localStorage.setItem("isLoggedIn", "true");
+       localStorage.setItem("userType", "registered");
+       localStorage.setItem("userName", fullName.value.trim());
+       localStorage.setItem("userEmail", email.value.trim());
+
+       let emails = JSON.parse(localStorage.getItem("savedEmails") || "[]");
+       if (!emails.includes(email.value.trim())) {
+       emails.push(email.value.trim());
+       localStorage.setItem("savedEmails", JSON.stringify(emails));
+       }
+
+       // حفظ الصورة إن اختارها المستخدم
+       if (avatar.files && avatar.files[0]) {
+         const reader = new FileReader();
+         reader.onload = function(e) {
+           localStorage.setItem("userAvatar", e.target.result);
+           alert("تم التسجيل بنجاح!");
+           window.location.href = "home.html";
+         }
+         reader.readAsDataURL(avatar.files[0]);
+       } else {
+         // صورة افتراضية
+         localStorage.setItem("userAvatar", "https://images.unsplash.com/photo-1534294668821-28a3054f4256?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dW5rbm93biUyMHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D");
+         alert("تم التسجيل بنجاح! ، أهلاً بك في ليوان");
+         window.location.href = "home.html";
+       }
+     }
+   });
+   cancelBtn.addEventListener('click', function() {
+     window.location.href = "index.html";
+   });
+ </script>
+</body>
+</html>

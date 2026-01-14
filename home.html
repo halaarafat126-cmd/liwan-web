@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+ <meta charset="UTF-8">
+ <title>الصفحة الرئيسية</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+ <style>
+   body {
+     margin: 0;
+     padding: 0;
+     direction: rtl;
+     font-family: 'Tajawal', Arial, sans-serif;
+     background: #f6f3ef;
+     min-height: 100vh;
+   }
+   /* ===== Sidebar ===== */
+   .liwan-sidenav {
+     position: fixed;
+     left: 0;
+     top: 0;
+     width: 80px;
+     height: 100vh;
+     background: #4c6b82;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     z-index: 1000;
+     box-shadow: 2px 0 18px rgba(40,54,90,0.07);
+   }
+   .liwan-sidenav ul {
+     list-style: none;
+     margin: 0;
+     padding: 0;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+   }
+   .liwan-sidenav li {
+     margin-bottom: 24px;
+     width: 100%;
+     display: flex;
+     justify-content: center;
+     position: relative;
+   }
+   .liwan-side-link {
+     position: relative;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 60px;
+     height: 60px;
+     border-radius: 12px;
+     color: #f8ebd7;
+     font-size: 24px;
+     text-decoration: none;
+     cursor: pointer;
+     transition: background 0.15s, box-shadow 0.18s;
+   }
+   .liwan-side-link:hover {
+     background: #365069;
+     box-shadow: 0 3px 18px rgba(31,59,77,0.13);
+   }
+   .liwan-side-link .liwan-icon-label {
+     position: absolute;
+     top: 50%;
+     left: 100%;
+     transform: translateY(-50%);
+     opacity: 0;
+     pointer-events: none;
+     background: #1f3b4d;
+     color: #f8ebd7;
+     padding: 8px 18px;
+     border-radius: 0 10px 10px 0;
+     white-space: nowrap;
+     font-size: 1em;
+     font-weight: 600;
+     transition: opacity 0.25s, left 0.2s;
+     box-shadow: 2px 2px 14px rgba(31,59,77,0.15);
+     z-index: 2;
+   }
+   .liwan-side-link:hover .liwan-icon-label {
+     opacity: 1;
+     pointer-events: auto;
+     left: 65px;
+   }
+   .liwan-side-link i {
+     margin: 0 auto;
+     transition: color 0.17s;
+   }
+   @media (max-width: 600px) {
+  .liwan-sidenav { 
+    width: 72px; 
+  }
+
+  .liwan-side-link { 
+    width: 56px; 
+    height: 56px; 
+  }
+
+  .liwan-side-link i {
+    font-size: 28px; /* ← هاي الأهم */
+  }
+
+  .liwan-side-link .liwan-icon-label { 
+    display: none; /* عالتلفون ما بدنا نص */
+  }
+}
+
+   /* ===== الصفحة الرئيسية ===== */
+   .home-dashboard-container {
+     margin-right: 50px;
+     margin-left: 140px;
+     margin-top: 40px;
+     padding-bottom: 40px;
+     font-family: 'Tajawal', Arial, sans-serif;
+     min-height: 100vh;
+   }
+   .home-welcome {
+     background: #fff;
+     border-radius: 20px;
+     padding: 32px 24px 20px 24px;
+     box-shadow: 0 2px 12px rgba(76,107,130,0.05);
+     margin-bottom: 30px;
+     text-align: center;
+   }
+   .home-welcome h1 { color: #355774; font-size: 2.3em; margin-bottom: 12px; font-weight: 900; letter-spacing: 1px;}
+   .home-welcome p { color: #54708e; font-size: 1.3em; margin-bottom: 6px;}
+   .home-intro { color: #497ba1; font-size: 1.1em; margin-bottom: 24px; font-weight: 500;}
+   .quick-access {
+     display: flex;
+     gap: 28px;
+     justify-content: center;
+     margin-bottom: 38px;
+   }
+   .quick-btn {
+     background: linear-gradient(90deg,#4c6b82 65%, #54708e 100%);
+     color: #fff;
+     font-size: 1.12em;
+     font-weight: 700;
+     padding: 20px 36px 18px 36px;
+     border:none;
+     border-radius: 15px;
+     box-shadow: 0 2px 8px rgba(76,107,130,0.10);
+     cursor: pointer;
+     display: flex;
+     gap: 10px;
+     align-items: center;
+     transition: background 0.18s, transform 0.17s;
+     min-width: 130px;
+     justify-content: center;
+   }
+   .quick-btn i { font-size: 1.25em;}
+   .quick-btn:hover { background: linear-gradient(90deg,#355774 50%, #497ba1 100%); transform: translateY(-2px) scale(1.045);}
+   .latest-activities-section { max-width: 970px; margin: 0 auto 0 auto; margin-bottom: 27px;}
+   .latest-activities-title { font-size: 1.35em; font-weight: bold; color:#49647a; margin-bottom: 22px; text-align: right;}
+   .cards-wrapper { display: flex; gap: 30px; flex-wrap: wrap; justify-content: flex-start;}
+   .activity-card {
+     background: #fff;
+     border-radius: 14px;
+     box-shadow: 0 0px 18px rgba(34,56,95,0.07);
+     padding: 20px 18px 14px 18px;
+     min-width: 240px;
+     max-width: 270px;
+     flex: 1 1 220px;
+     display: flex;
+     flex-direction: column;
+     min-height: 120px;
+     transition: box-shadow 0.21s;
+   }
+   .activity-card:hover { box-shadow: 0 3px 30px rgba(50,82,122,0.14);}
+   .activity-title { color: #355774; font-size: 1.15em; font-weight: bold; margin-bottom: 8px;}
+   .activity-desc { color: #57728d; font-size: 1em; margin-bottom: 3px;}
+   .activity-time { color: #98aec2; font-size: 0.97em; margin-top: auto; text-align: left;}
+   @media (max-width: 900px) {
+     .cards-wrapper { flex-direction: column; gap:18px;}
+     .home-dashboard-container {margin-right:12px; margin-left:12px;}
+   }
+   .emergency-btn {
+     position: fixed;
+     right: 35px;
+     bottom: 38px;
+     z-index: 1200;
+     background: linear-gradient(45deg, #e94f4e, #801624 90%);
+     color: #fff;
+     font-size: 1.2em;
+     font-weight: bold;
+     border-radius: 50%;
+     width: 63px;
+     height: 63px;
+     box-shadow: 0 3px 20px rgba(233,79,78,0.10), 0 0 0 3px #efecec77;
+     border: none;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     cursor: pointer;
+     transition: background 0.22s, box-shadow 0.21s;
+     outline: none;
+   }
+   .emergency-btn:active, .emergency-btn:focus { background: #801624; box-shadow: 0 0 0 5px 
+#e94f4e44;}   .emergency-btn i { font-size: 1.55em; }
+   #refresh-toast {
+     position: fixed;
+     top: 32px;
+     right: 32px;
+     background: #12b980;
+     color: #fff;
+     padding: 18px 26px 15px 26px;
+     border-radius: 12px;
+     font-size: 1.13em;
+     font-weight: 700;
+     box-shadow: 0 2px 20px rgba(40,184,130,0.14);
+     opacity: 0;
+     pointer-events: none;
+     transform: translateY(-16px) scale(0.95);
+     transition: opacity 0.27s, transform 0.24s;
+     z-index: 2100;
+     text-align: center;
+     letter-spacing: .5px;
+   }
+   #refresh-toast.show {
+     opacity: 1;
+     transform: translateY(0) scale(1.01);
+     pointer-events: auto;
+   }
+   .chat-link {
+  position: relative;
+}
+
+.chat-dot {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 10px;
+  height: 10px;
+  background: #801624;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #4c6b82;
+}
+@media (max-width: 600px) {
+  .chat-dot {
+    width: 12px;
+    height: 12px;
+    top: 8px;
+    right: 10px;
+  }
+}
+
+ </style>
+</head>
+<body>
+ <!-- ===== Sidebar ===== -->
+ <nav class="liwan-sidenav" aria-label="شريط التنقل الجانبي الثابت">
+   <ul>
+     <li>
+       <a href="home.html" class="liwan-side-link">
+         <i class="fas fa-home"></i>
+         <span class="liwan-icon-label">الرئيسية</span>
+       </a>
+     </li>
+     <li>
+       <a href="profile.html" class="liwan-side-link">
+         <i class="fas fa-user-circle"></i>
+         <span class="liwan-icon-label">الملف الشخصي</span>
+       </a>
+     </li>
+     <li>
+      <a href="chat.html" class="liwan-side-link chat-link">
+        <i class="fas fa-comments"></i>
+        <span class="chat-dot"></span>
+        <span class="liwan-icon-label">الدردشة</span>
+      </a>      
+     </li>
+     <li>
+       <a href="activities.html" class="liwan-side-link">
+         <i class="fas fa-calendar-alt"></i>
+         <span class="liwan-icon-label">الأنشطة</span>
+       </a>
+     </li>
+     <li>
+       <a href="store.html" class="liwan-side-link">
+         <i class="fas fa-store"></i>
+         <span class="liwan-icon-label">المتجر</span>
+       </a>
+     </li>
+     <li>
+       <a href="transport.html" class="liwan-side-link">
+         <i class="fas fa-bus"></i>
+         <span class="liwan-icon-label">التنقلات</span>
+       </a>
+     </li>
+     <li>
+       <a href="it-support.html" class="liwan-side-link">
+         <i class="fas fa-headset"></i>
+         <span class="liwan-icon-label">الدعم التقني</span>
+       </a>
+     </li>
+     <li>
+       <a href="about.html" class="liwan-side-link">
+         <i class="fas fa-circle-info"></i>
+         <span class="liwan-icon-label">عن ليوان</span>
+       </a>
+     </li>
+   </ul>
+ </nav>
+ <!-- ===== Main Content ===== -->
+ <div class="home-dashboard-container">
+   <div class="home-welcome">
+    <h1 id="welcomeTitle">مرحبًا بك في ليوان 👋</h1>
+    <p id="welcomeSub">نحن سعداء بوجودك معنا</p>
+     <div class="home-intro">
+       هنا تجد كل ما تحتاجه من خدمات وأنشطة، وطرق سريعة للوصول لكل شيء بسهولة ويسر.<br/> استكشف الجديد وشاركنا لحظاتك!
+     </div>
+   </div>
+   <div class="quick-access">
+     <button class="quick-btn" onclick="window.location.href='activities.html'">
+       <i class="fas fa-calendar-alt"></i> الأنشطة
+     </button>
+     <button class="quick-btn" onclick="window.location.href='chat.html'">
+       <i class="fas fa-comments"></i> الدردشة العامة
+     </button>
+     <button class="quick-btn" onclick="window.location.href='store.html'">
+       <i class="fas fa-store"></i> المتجر
+     </button>
+   </div>
+   <div class="latest-activities-section">
+     <div class="latest-activities-title">أحدث الأنشطة</div>
+     <div class="cards-wrapper" id="activities-cards"></div>
+   </div>
+ </div>
+ <button class="emergency-btn" title="طوارئ" onclick="handleEmergency()">
+   <i class="fas fa-phone-volume"></i>
+ </button>
+ <div id="refresh-toast">تم تحديث المحتوى بنجاح!</div>
+ <script>
+  function updateWelcomeMessage() {
+  const name = localStorage.getItem("userName") || "زائر";
+
+  const messages = [
+    `مرحباً ${name} 👋`,
+    `أهلاً بعودتك يا ${name}`,
+    `وجودك يسعدنا يا ${name} 🌿`,
+    `ليوان اشتاق لك يا ${name}`
+  ];
+
+  const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+  document.getElementById("welcomeTitle").textContent = randomMsg;
+ }
+ document.addEventListener('DOMContentLoaded', function() {
+  updateWelcomeMessage();
+  renderLatestActivities();
+ });
+   const demoActivities = [
+     { title: "ورشة عمل: مهارات التواصل", desc: "انضم إلينا في ورشة تفاعلية لتطوير مهارات التواصل.", time: "اليوم الساعة 5:00 مساءً" },
+     { title: "جلسة ألعاب جماعية", desc: "استمتع بأمسية ممتعة مع الألعاب والمسابقات.", time: "غدًا الساعة 8:30 مساءً" },
+     { title: "ندوة: الصحة النفسية", desc: "محاضرة قيمة حول الصحة النفسية وأهميتها.", time: "بعد 3 أيام - 7:00 مساءً" },
+     { title: "معرض المنتجات اليدوية", desc: "اكتشف إبداعات المجتمع من المنتجات اليدوية.", time: "الجمعة القادم" }
+   ];
+   function renderLatestActivities() {
+     const cardsContainer = document.getElementById('activities-cards');
+     cardsContainer.innerHTML = '';
+     demoActivities.slice(0, 4).forEach(act => {
+       const card = document.createElement('div');
+       card.className = 'activity-card';
+       card.innerHTML = `
+         <div class="activity-title">${act.title}</div>
+         <div class="activity-desc">${act.desc}</div>
+         <div class="activity-time"><i class="fas fa-clock"></i> ${act.time}</div>
+       `;
+       cardsContainer.appendChild(card);
+     });
+   }
+   function handleEmergency() {
+     alert("تم إرسال طلب الطوارئ! سيتم التواصل معك فورًا 🚨");
+   }
+   function showRefreshToast() {
+     var toast = document.getElementById('refresh-toast');
+     toast.classList.add('show');
+     setTimeout(() => { toast.classList.remove('show'); }, 1750);
+   }
+   document.addEventListener('DOMContentLoaded', function() {
+     renderLatestActivities();
+   });
+ </script>
+</body>
+</html>

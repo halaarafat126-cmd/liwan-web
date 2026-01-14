@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدعم التقني | ليوان</title>
+<link href="https://fonts.googleapis.com/css?family=Tajawal:400,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Tajawal', sans-serif;
+  background: #f6f3ef;
+  color: #355774;
+}
+/* ===== Sidebar ===== */
+.liwan-sidenav {
+     position: fixed;
+     left: 0;
+     top: 0;
+     width: 80px;
+     height: 100vh;
+     background: #4c6b82;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     z-index: 1000;
+     box-shadow: 2px 0 18px rgba(40,54,90,0.07);
+   }
+   .liwan-sidenav ul {
+     list-style: none;
+     margin: 0;
+     padding: 0;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+   }
+   .liwan-sidenav li {
+     margin-bottom: 24px;
+     width: 100%;
+     display: flex;
+     justify-content: center;
+     position: relative;
+   }
+   .liwan-side-link {
+     position: relative;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 60px;
+     height: 60px;
+     border-radius: 12px;
+     color: #f8ebd7;
+     font-size: 24px;
+     text-decoration: none;
+     cursor: pointer;
+     transition: background 0.15s, box-shadow 0.18s;
+   }
+   .liwan-side-link:hover {
+     background: #365069;
+     box-shadow: 0 3px 18px rgba(31,59,77,0.13);
+   }
+   .liwan-side-link .liwan-icon-label {
+     position: absolute;
+     top: 50%;
+     left: 100%;
+     transform: translateY(-50%);
+     opacity: 0;
+     pointer-events: none;
+     background: #1f3b4d;
+     color: #f8ebd7;
+     padding: 8px 18px;
+     border-radius: 0 10px 10px 0;
+     white-space: nowrap;
+     font-size: 1em;
+     font-weight: 600;
+     transition: opacity 0.25s, left 0.2s;
+     box-shadow: 2px 2px 14px rgba(31,59,77,0.15);
+     z-index: 2;
+   }
+   .liwan-side-link:hover .liwan-icon-label {
+     opacity: 1;
+     pointer-events: auto;
+     left: 65px;
+   }
+   .liwan-side-link i {
+     margin: 0 auto;
+     transition: color 0.17s;
+   }
+   @media (max-width: 600px) {
+  .liwan-sidenav { 
+    width: 72px; 
+  }
+
+  .liwan-side-link { 
+    width: 56px; 
+    height: 56px; 
+  }
+
+  .liwan-side-link i {
+    font-size: 28px; /* ← هاي الأهم */
+  }
+
+  .liwan-side-link .liwan-icon-label { 
+    display: none; /* عالتلفون ما بدنا نص */
+  }
+}
+
+.main-content {
+  margin-left: 120px;
+  padding: 40px;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+/* ===== FORM ===== */
+.support-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+}
+
+.support-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.support-form label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+.support-form input,
+.support-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.support-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.support-form button {
+  margin-top: 18px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #f6bd60;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.support-form button:hover {
+  background: #e5a551;
+}
+
+.success-message {
+  display: none;
+  margin-top: 16px;
+  padding: 12px;
+  background: #e6f4ea;
+  color: #1e6f43;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+  .main-content {
+    margin-left: 80px;
+    padding: 20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR (مثله مثل باقي الصفحات) -->
+<nav class="liwan-sidenav" aria-label="شريط التنقل الجانبي الثابت">
+    <ul>
+      <li>
+        <a href="home.html" class="liwan-side-link">
+          <i class="fas fa-home"></i>
+          <span class="liwan-icon-label">الرئيسية</span>
+        </a>
+      </li>
+      <li>
+        <a href="profile.html" class="liwan-side-link">
+          <i class="fas fa-user-circle"></i>
+          <span class="liwan-icon-label">الملف الشخصي</span>
+        </a>
+      </li>
+      <li>
+       <a href="chat.html" class="liwan-side-link chat-link">
+         <i class="fas fa-comments"></i>
+         <span class="chat-dot"></span>
+         <span class="liwan-icon-label">الدردشة</span>
+       </a>      
+      </li>
+      <li>
+        <a href="activities.html" class="liwan-side-link">
+          <i class="fas fa-calendar-alt"></i>
+          <span class="liwan-icon-label">الأنشطة</span>
+        </a>
+      </li>
+      <li>
+        <a href="store.html" class="liwan-side-link">
+          <i class="fas fa-store"></i>
+          <span class="liwan-icon-label">المتجر</span>
+        </a>
+      </li>
+      <li>
+        <a href="transport.html" class="liwan-side-link">
+          <i class="fas fa-bus"></i>
+          <span class="liwan-icon-label">التنقلات</span>
+        </a>
+      </li>
+      <li>
+        <a href="it-support.html" class="liwan-side-link">
+          <i class="fas fa-headset"></i>
+          <span class="liwan-icon-label">الدعم التقني</span>
+        </a>
+      </li>
+      <li>
+        <a href="about.html" class="liwan-side-link">
+          <i class="fas fa-circle-info"></i>
+          <span class="liwan-icon-label">عن ليوان</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+<!-- MAIN -->
+<div class="main-content">
+  <div class="page-title">الدعم التقني</div>
+  
+  <form class="support-form" id="supportForm">
+    <h2>أرسل لنا مشكلتك</h2>
+    
+    <label for="name">الاسم</label>
+    <input type="text" id="name" placeholder="أدخل اسمك" required>
+    
+    <label for="email">الإيميل</label>
+    <input type="email" id="email" placeholder="أدخل إيميلك" required>
+    
+    <label for="subject">الموضوع</label>
+    <input type="text" id="subject" placeholder="موضوع المشكلة" required>
+    
+    <label for="message">الرسالة</label>
+    <textarea id="message" placeholder="اكتب تفاصيل المشكلة" required></textarea>
+    
+    <button type="submit">إرسال</button>
+    
+    <div class="success-message" id="successMessage">
+      ✅ تم إرسال الرسالة بنجاح! سنتواصل معك قريباً.
+    </div>
+  </form>
+</div>
+
+<script>
+document.getElementById('supportForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  
+  // محاكاة إرسال
+  const success = document.getElementById('successMessage');
+  success.style.display = 'block';
+  
+  // إعادة تعيين النموذج
+  this.reset();
+  
+  // اختفاء الرسالة بعد 4 ثواني
+  setTimeout(()=> success.style.display='none', 4000);
+});
+</script>
+
+</body>
+</html>

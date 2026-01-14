@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>الأنشطة | ليوان</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css?family=Tajawal:400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+
+  <style>
+    body{
+      margin:0;
+      font-family:'Tajawal',Arial,sans-serif;
+      background:#f6f3ef;
+      color:#355774;
+      min-height:100vh;
+      direction:rtl;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .liwan-sidenav {
+     position: fixed;
+     left: 0;
+     top: 0;
+     width: 80px;
+     height: 100vh;
+     background: #4c6b82;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     z-index: 1000;
+     box-shadow: 2px 0 18px rgba(40,54,90,0.07);
+   }
+   .liwan-sidenav ul {
+     list-style: none;
+     margin: 0;
+     padding: 0;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+   }
+   .liwan-sidenav li {
+     margin-bottom: 24px;
+     width: 100%;
+     display: flex;
+     justify-content: center;
+     position: relative;
+   }
+   .liwan-side-link {
+     position: relative;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 60px;
+     height: 60px;
+     border-radius: 12px;
+     color: #f8ebd7;
+     font-size: 24px;
+     text-decoration: none;
+     cursor: pointer;
+     transition: background 0.15s, box-shadow 0.18s;
+   }
+   .liwan-side-link:hover {
+     background: #365069;
+     box-shadow: 0 3px 18px rgba(31,59,77,0.13);
+   }
+   .liwan-side-link .liwan-icon-label {
+     position: absolute;
+     top: 50%;
+     left: 100%;
+     transform: translateY(-50%);
+     opacity: 0;
+     pointer-events: none;
+     background: #1f3b4d;
+     color: #f8ebd7;
+     padding: 8px 18px;
+     border-radius: 0 10px 10px 0;
+     white-space: nowrap;
+     font-size: 1em;
+     font-weight: 600;
+     transition: opacity 0.25s, left 0.2s;
+     box-shadow: 2px 2px 14px rgba(31,59,77,0.15);
+     z-index: 2;
+   }
+   .liwan-side-link:hover .liwan-icon-label {
+     opacity: 1;
+     pointer-events: auto;
+     left: 65px;
+   }
+   .liwan-side-link i {
+     margin: 0 auto;
+     transition: color 0.17s;
+   }
+   @media (max-width: 600px) {
+  .liwan-sidenav { 
+    width: 72px; 
+  }
+
+  .liwan-side-link { 
+    width: 56px; 
+    height: 56px; 
+  }
+
+  .liwan-side-link i {
+    font-size: 28px; /* ← هاي الأهم */
+  }
+
+  .liwan-side-link .liwan-icon-label { 
+    display: none; /* عالتلفون ما بدنا نص */
+  }
+}
+
+    /* ===== MAIN ===== */
+    .main-content{
+      margin-left:140px;
+      margin-right:40px;
+      padding:40px 0;
+    }
+
+    .page-title{
+      text-align:center;
+      font-size:2.1rem;
+      font-weight:700;
+      margin-bottom:24px;
+    }
+
+    /* ===== FILTERS ===== */
+    .activity-filters{
+      background:#fff;
+      border-radius:18px;
+      padding:14px;
+      display:flex;
+      justify-content:center;
+      gap:28px;
+      width:fit-content;
+      margin:0 auto 30px;
+      box-shadow:0 2px 12px rgba(76,107,130,.08);
+    }
+    .activity-filter-btn{
+      background:none;
+      border:none;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      color:#54708e;
+      font-size:1.05rem;
+    }
+    .activity-filter-btn.selected{
+      color:#355774;
+      font-weight:700;
+    }
+    .activity-filter-btn i{
+      font-size:1.8rem;
+      margin-bottom:6px;
+    }
+
+    /* ===== GRID ===== */
+    .activities-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:28px;
+    }
+
+    .activity-card{
+  background:#fff;
+  border-radius:18px;
+  box-shadow:0 4px 20px rgba(0,0,0,.08);
+  overflow:hidden;
+  /* height:400px; ← نحذفه */
+  display:flex;
+  flex-direction:column;
+  transition: all 0.3s ease; /* إضافة حركة سلسة */
+}
+
+    .activity-card img{
+      width:100%;
+      height:160px;
+      object-fit:cover;
+    }
+    .activity-card-title{
+      font-size:1.15rem;
+      font-weight:700;
+      padding:14px 16px 6px;
+    }
+
+    /* التاريخ + المكان (ثابت) */
+    .activity-info{
+      padding:0 16px;
+      font-size:.95rem;
+      color:#54708e;
+    }
+
+    /* الوصف (مخفي) */
+    .activity-description{
+      display:none;
+      margin:10px 16px;
+      padding:12px;
+      background:#f6f3ef;
+      border-radius:12px;
+      font-size:.95rem;
+      color:#355774;
+    }
+
+    .activity-card-btn{
+      margin:auto 16px 16px;
+      padding:10px;
+      border:none;
+      border-radius:12px;
+      background:#f6bd60;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .activity-details-box{
+  display:none;
+  margin:10px 16px;
+  padding:12px;
+  background:#f6f3ef;
+  border-radius:12px;
+  font-size:.95rem;
+  color:#355774;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+  transition: all 0.3s ease; /* حركة سلسة للفتح والإغلاق */
+}
+@media (max-width:600px){
+  .activities-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<nav class="liwan-sidenav">
+  <ul>
+    <li><a href="home.html" class="liwan-side-link"><i class="fas fa-home"></i><span class="liwan-icon-label">الرئيسية</span></a></li>
+    <li><a href="profile.html" class="liwan-side-link"><i class="fas fa-user-circle"></i><span class="liwan-icon-label">الملف الشخصي</span></a></li>
+    <li><a href="chat.html" class="liwan-side-link"><i class="fas fa-comments"></i><span class="liwan-icon-label">الدردشة</span></a></li>
+    <li><a href="activities.html" class="liwan-side-link"><i class="fas fa-calendar-alt"></i><span class="liwan-icon-label">الأنشطة</span></a></li>
+    <li><a href="store.html" class="liwan-side-link"><i class="fas fa-store"></i><span class="liwan-icon-label">المتجر</span></a></li>
+    <li><a href="transport.html" class="liwan-side-link"><i class="fas fa-bus"></i><span class="liwan-icon-label">التنقلات</span></a></li>
+    <li><a href="it-support.html" class="liwan-side-link"><i class="fas fa-headset"></i><span class="liwan-icon-label">الدعم التقني</span></a></li>
+    <li><a href="about.html" class="liwan-side-link"><i class="fas fa-circle-info"></i><span class="liwan-icon-label">عن ليوان</span></a></li>
+  </ul>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<div class="main-content">
+  <div class="page-title">الأنشطة</div>
+
+  <div class="activity-filters">
+    <button class="activity-filter-btn selected" data-filter="يدوية"><i class="fas fa-paint-brush"></i>يدوية</button>
+    <button class="activity-filter-btn" data-filter="جماعية"><i class="fas fa-users"></i>جماعية</button>
+    <button class="activity-filter-btn" data-filter="ذهنية"><i class="fas fa-brain"></i>ذهنية</button>
+    <button class="activity-filter-btn" data-filter="رحلات"><i class="fas fa-tree"></i>رحلات</button>
+  </div>
+
+  <div class="activities-grid" id="activitiesGrid"></div>
+</div>
+
+<script>
+const activities = [
+
+// ===== الأنشطة اليدوية =====
+{
+  title: "ورشة تشكيل الغليونلنحوّل أعواد التنظيف إلى ورود جميلة",
+  image: "اعواد الغليون.jpeg",
+  date: "20 / 1 / 2026",
+  place: "قاعة تجمع رقم 7",
+  description: "نشكّل بأيدينا وروداً لطيفة ومليئة بالألوان، نشاط بسيط لكنه يملأ الجو فرحاً وخفّة.",
+  category: "يدوية"
+},
+{
+  title: "اصنع طوقاً لابنتك، حفيدتك أو حتى لحيوانك الأليف.",
+  image: "اكسسوارات.jpeg",
+  date: "22 / 1 / 2026",
+  place: "قاعة الحِرف",
+  description: "ننظم الخرز بترتيب ناعم لنصنع قطع إكسسوار ملوّنة كل منها تعكس جمال مُصمّمها",
+  category: "يدوية"
+},
+{
+  title: "اهتم بإصيصك !",
+  image: "الزراعة الفردية.jpeg",
+  date: "23 / 1 / 2026",
+  place: "الحديقة الأمامية",
+  description: "كل مشارك يعتني بنبتته الخاصة ويعطيها اسماً مميزاً، يراها تكبر يوماً بعد يوم كأنها صديق صغير يبادله العناية والمحبة",
+  category: "يدوية"
+},
+{
+  title: "لنصنع فراشة بالورق (أوريغامي)",
+  image: "اوريغامي.jpeg",
+  date: "24 / 1 / 2026",
+  place: "قاعة تجمع رقم 9",
+  description: "نتعرف على ملمس الطين ونشكّله ببطء، لنصنع قطعاً فنية تحمل بصمتنا ولمستنا الخاصة",
+  category: "يدوية"
+},
+{
+  title: "لنواكب التطور سوياً ! ",
+  image: "تكنلوجيا.jpeg",
+  date: "22 / 1 / 2026",
+  place: "قاعة الحِرف",
+  description: "نجلس معاً خطوة بخطوة لنتعرف على أساسيات التكنولوجيا، ونستخدمها بسهولة للتواصل مع العالم",
+  category: "يدوية"
+},
+{
+  title: "اصنع وشاحك بنفسك !",
+  image: "حياكة.jpeg",
+  date: "22 / 1 / 2026",
+  place: "قاعة الحِرف",
+  description: "نتعلم غُرزة بعد غُرزة، إلى أن تتحول الخيوط بين أيدينا لقطعة دافئة مليئة بالمحبة",
+  category: "يدوية"
+},
+{
+  title: "الخط العربي والزخرفة",
+  image: "خط.jpeg",
+  date: "22 / 1 / 2026",
+  place: "قاعة الحِرف",
+  description: "نغمس أرواحنا في جمال الحروف ونشكّل كلمات راقية، نرسم فيها أصالة الخط ورقّة الفن",
+  category: "يدوية"
+},
+{
+  title: "عبر عن نفسك بالألوان",
+  image: "رسم وتلوين.jpeg",
+  date: "22 / 1 / 2026",
+  place: "قاعة الحِرف",
+  description: "مساحة نترك فيها الألوان تعبر عنّا، ونفرّغ طاقتنا بالرسم لنخرج بروح أخف وقلب أسعد",
+  category: "يدوية"
+},
+{
+  title: "اصنع شمعتك بالشكل والرائحة التي تختارها ",
+  image: "شمع.jpeg",
+  date: "22 / 1 / 2026",
+  place: "قاعة الحِرف",
+  description: "نمزج الروائح ونشكّل الشمع بأيدينا، لنصنع قطعاً تفوح منها أجمل الروائح",
+  category: "يدوية"
+},
+{
+  title: "لنحول عطرنا المفضل إلى صابون",
+  image: "صابون.jpeg",
+  date: "22 / 1 / 2026",
+  place: "قاعة الحِرف",
+  description: "بين الرغوة والعطر… نشاط الصابون يصنع ابتسامة صغيرة ولحظات جميلة كثيرة.",
+  category: "يدوية"
+},
+// ===== الأنشطة الجماعية =====
+{
+  title: "لنتذكر معاً أفلامنا الكلاسيكية القديمة",
+  image: "افلام.jpeg",
+  date: "2 / 2 / 2026",
+  place: "الغرفة الدافئة",
+  description: "نجتمع على أفلام قديمة نحبها، ونسترجع معها زمناً جميلاً ونقضي وقتاً هادئاً معاً",
+  category: "جماعية"
+},
+{
+  title: "نشاط الحكواتي للأطفال",
+  image: "الحكواتي للاطفال.jpeg",
+  date: "25 / 1 / 2026",
+  place: "الحديقة الخلفية",
+  description: "لحظات جميلة يسمع فيها الأطفال قصص الأجداد، ليكبروا على دفء الحكاية وبهجة التواصل بين الأجيال",
+  category: "جماعية"
+},
+{
+  title: "نشاط الحكواتي لكبار السن",
+  image: "الحكواتي للكبار.jpeg",
+  date: "25 / 1 / 2026",
+  place: "الساحة الرئيسية",
+  description: "مساحة دافئة يروي فيها كل مشارك قصة من قلبه… قصة تشبهه وتشبه عمره وحكمته",
+  category: "جماعية"
+},
+{
+  title: "تمارين تنشيط بسيطة",
+  image: "تمارين.jpeg",
+  date: "25 / 1 / 2026",
+  place: "البهو الرياضي",
+  description: "تمارين خفيفة نقوم بها بوجود مدربين مختصين، تساعدنا على تخفيف التوتر وتقوية الجسد بطريقة مريحة وآمنة",
+  category: "جماعية"
+},
+{
+  title: "الزراعة الجماعية مع مزارعينا المحترفين",
+  image: "زراعة جماعية.jpeg",
+  date: "25 / 1 / 2026",
+  place: " الحديقة العامة",
+  description: "نتعلم الزراعة من خبراء بابتسامة وحماس، ونزرع معاً نباتات تبقى شاهدة على الرفقة والعمل الجماعي",
+  category: "جماعية"
+},
+
+// ===== الأنشطة الذهنية =====
+{
+  title: "ألعاب لوحية.jpeg",
+  image: "ألعاب لوحية.jpeg",
+  date: "27 / 1 / 2026",
+  place: "قاعة التفكير",
+  description: "ألعاب لوحية (الزهر، الداما، الدومينو)",
+  category: "ذهنية"
+},
+{
+  title: "تمارين الذاكرة",
+  image: "ألعاب ذاكرة.jpeg",
+  date: "27 / 1 / 2026",
+  place: "قاعة التفكير",
+  description: "مجموعة ألعاب ذهنية تساعد على تنشيط الذاكرة والتركيز.",
+  category: "ذهنية"
+},
+{
+  title: "ألعاب الذاكرة",
+  image: "علاج بالروائح.jpeg",
+  date: "27 / 1 / 2026",
+  place: "قاعة التفكير",
+  description: "أنشطة مرحة تنشّط الذاكرة وتبقي العقل يعمل، بطابع خفيف وممتع يجمع بين التفكير والضحك",
+  category: "ذهنية"
+},
+{
+  title: "قراءة جماعية أو فردية",
+  image: "قراءة.jpeg",
+  date: "27 / 1 / 2026",
+  place: "قاعة التفكير",
+  description: "قراءة هادئة بين هواء عمّان وإطلالاتها، نفتح فيها كتاباً جديداً أو ذكرى قديمة ونشاركها إن أحببنا",
+  category: "ذهنية"
+},
+
+// ===== الرحلات =====
+{
+  title: "حفلات الشواء",
+  image: "حفلات شواء.jpeg",
+  date: "30 / 1 / 2026",
+  place: "خارج المركز",
+  description: "تجمع محبّب نشارك فيه الطعام الساخن والجو العائلي، ونستمتع بوقت مليء بالمرح والدفء",
+  category: "رحلات"
+},
+{
+  title: "حفلات الشاي على الحطب في الطبيعة",
+  image: "حفلة الشاي.jpeg",
+  date: "30 / 1 / 2026",
+  place: "خارج المركز",
+  description: "لحظات هادئة ودافئة مليئة برائحة الشاي على الحطب، ونستمتع بجمال الطبيعة وصحبة تُشعرنا بالأمان",
+  category: "رحلات"
+},
+{
+  title: "زيارات للأماكن الأثرية",
+  image: "مواقع اثرية.jpeg",
+  date: "30 / 1 / 2026",
+  place: "خارج المركز",
+  description: "رحلات جماعية نزور فيها المواقع التاريخية، ونقضي وقتاً نعيد فيه صلة الماضي بالحاضر",
+  category: "رحلات"
+},
+];
+
+
+const grid = document.getElementById("activitiesGrid");
+const buttons = document.querySelectorAll(".activity-filter-btn");
+
+function render(list){
+  grid.innerHTML="";
+  list.forEach(a=>{
+    grid.innerHTML+=`
+      <div class="activity-card">
+        <img src="${a.image}">
+        <div class="activity-card-title">${a.title}</div>
+        <div class="activity-info">
+          <div>📅 ${a.date}</div>
+          <div>📍 ${a.place}</div>
+        </div>
+
+        <div class="activity-details-box">
+          ${a.description}
+        </div>
+
+        <button class="activity-card-btn">التفاصيل</button>
+      </div>`;
+  });
+}
+
+
+buttons.forEach(btn=>{
+  btn.onclick=()=>{
+    buttons.forEach(b=>b.classList.remove("selected"));
+    btn.classList.add("selected");
+    render(activities.filter(a=>a.category===btn.dataset.filter));
+  };
+});
+
+render(activities.filter(a=>a.category==="يدوية"));
+
+grid.addEventListener("click", e=>{
+  if(e.target.classList.contains("activity-card-btn")){
+    const box = e.target.previousElementSibling;
+    if(box.style.display === "block"){
+      box.style.display = "none";
+    } else {
+      box.style.display = "block";
+    }
+  }
+});
+
+
+</script>
+
+</body>
+</html>
